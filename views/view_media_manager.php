@@ -20,7 +20,7 @@
                   <!-- images upload form -->
                   <div class="container">
                   <h1 id="upload-images" align="center">Upload Images</h1>
-                    <form action="<?php echo SITE_URL ?>/manager/upload" class="dropzone needsclick dz-clickable">
+                    <form action="<?php echo SITE_URL ?>/manager/upload" class="dropzone needsclick dz-clickable" id="uploadForm" enctype="multipart/form-data">
                           <div class="dz-message needsclick" >
                               Drop files here or click to upload.<br>
                               Supported formats(jpg, jpeg, png)<br>
@@ -43,6 +43,18 @@
                                 </button>-->
                     </div>    
                             <?php }?>
+                                <!-- count of images -->
+                                <div align="right"> 
+                                	<?php
+                                		$directory = "public/uploads/";
+										$filecount = 0;
+										$files = glob($directory . "*");
+										if ($files){
+										 $filecount = count($files);
+										}
+										echo "Images Count : ". $filecount ;
+                                ?></div>
+
                   </div>
                 </div> <!--End card-->
             </div>    <!--End row -->  
@@ -70,6 +82,23 @@ $(function() {
 $(document).ready(function(){
 $("button").click(function(){
         $("#data-id").remove();
+    });
+});
+</script>
+<script>
+$(document).ready(function(){
+    $('#uploadForm').ajaxForm({
+        target:'#imagesPreview',
+        beforeSubmit:function(){
+            $('#uploadStatus').html('<img src="uploading.gif"/>');
+        },
+        success:function(){
+            $('#images').val('');
+            $('#uploadStatus').html('');
+        },
+        error:function(){
+            $('#uploadStatus').html('Images upload failed, please try again.');
+        }
     });
 });
 </script>
